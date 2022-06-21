@@ -62,9 +62,6 @@ Shut down a worker
         if not self.is_worker(workername):
             raise web.HTTPError(404, "Unknown worker '%s'" % workername)
 
-        # logger.info("Shutting down '%s' worker", workername)
-        # self.capp.control.broadcast('shutdown', destination=[workername])
-        # self.write(dict(message="Shutting down!"))
         self.set_status(403)
         self.write(dict(message="You do not have permission!!!"))
 
@@ -104,19 +101,6 @@ Restart worker's pool
         if not self.is_worker(workername):
             raise web.HTTPError(404, "Unknown worker '%s'" % workername)
 
-        # logger.info("Restarting '%s' worker's pool", workername)
-        # response = self.capp.control.broadcast(
-        #     'pool_restart', arguments={'reload': False},
-        #     destination=[workername], reply=True)
-        # if response and 'ok' in response[0][workername]:
-        #     self.write(dict(
-        #         message="Restarting '%s' worker's pool" % workername))
-        # else:
-        #     logger.error(response)
-        #     self.set_status(403)
-        #     self.write("Failed to restart the '%s' pool: %s" % (
-        #         workername, self.error_reason(workername, response)
-        #     ))
         self.set_status(403)
         self.write(dict(message="You do not have permission!!!"))
 
@@ -158,19 +142,6 @@ Grow worker's pool
         if not self.is_worker(workername):
             raise web.HTTPError(404, "Unknown worker '%s'" % workername)
 
-        # n = self.get_argument('n', default=1, type=int)
-
-        # logger.info("Growing '%s' worker's pool by '%s'", workername, n)
-        # response = self.capp.control.pool_grow(
-        #     n=n, reply=True, destination=[workername])
-        # if response and 'ok' in response[0][workername]:
-        #     self.write(dict(
-        #         message="Growing '%s' worker's pool by %s" % (workername, n)))
-        # else:
-        #     logger.error(response)
-        #     self.set_status(403)
-        #     self.write("Failed to grow '%s' worker's pool: %s" % (
-        #         workername, self.error_reason(workername, response)))
         self.set_status(403)
         self.write("You do not have permission!!!")
 
@@ -212,20 +183,6 @@ Shrink worker's pool
         if not self.is_worker(workername):
             raise web.HTTPError(404, "Unknown worker '%s'" % workername)
 
-        # n = self.get_argument('n', default=1, type=int)
-
-        # logger.info("Shrinking '%s' worker's pool by '%s'", workername, n)
-        # response = self.capp.control.pool_shrink(
-        #     n=n, reply=True, destination=[workername])
-        # if response and 'ok' in response[0][workername]:
-        #     self.write(dict(message="Shrinking '%s' worker's pool by %s" % (
-        #                     workername, n)))
-        # else:
-        #     logger.error(response)
-        #     self.set_status(403)
-        #     self.write("Failed to shrink '%s' worker's pool: %s" % (
-        #         workername, self.error_reason(workername, response)
-        #     ))
         self.set_status(403)
         self.write("You do not have permission!!!")
 
@@ -269,24 +226,6 @@ Autoscale worker pool
         if not self.is_worker(workername):
             raise web.HTTPError(404, "Unknown worker '%s'" % workername)
 
-        # min = self.get_argument('min', type=int)
-        # max = self.get_argument('max', type=int)
-
-        # logger.info("Autoscaling '%s' worker by '%s'",
-        #             workername, (min, max))
-        # response = self.capp.control.broadcast(
-        #     'autoscale', arguments={'min': min, 'max': max},
-        #     destination=[workername], reply=True)
-        # if response and 'ok' in response[0][workername]:
-        #     self.write(dict(message="Autoscaling '%s' worker "
-        #                             "(min=%s, max=%s)" % (
-        #                                 workername, min, max)))
-        # else:
-        #     logger.error(response)
-        #     self.set_status(403)
-        #     self.write("Failed to autoscale '%s' worker: %s" % (
-        #         workername, self.error_reason(workername, response)
-        #     ))
         self.set_status(403)
         self.write("You do not have permission!!!")
 
@@ -328,21 +267,6 @@ Start consuming from a queue
         if not self.is_worker(workername):
             raise web.HTTPError(404, "Unknown worker '%s'" % workername)
 
-        # queue = self.get_argument('queue')
-
-        # logger.info("Adding consumer '%s' to worker '%s'",
-        #             queue, workername)
-        # response = self.capp.control.broadcast(
-        #     'add_consumer', arguments={'queue': queue},
-        #     destination=[workername], reply=True)
-        # if response and 'ok' in response[0][workername]:
-        #     self.write(dict(message=response[0][workername]['ok']))
-        # else:
-        #     logger.error(response)
-        #     self.set_status(403)
-        #     self.write("Failed to add '%s' consumer to '%s' worker: %s" % (
-        #         queue, workername, self.error_reason(workername, response)
-        #     ))
         self.set_status(403)
         self.write("You do not have permission!!!")
 
@@ -384,22 +308,6 @@ Stop consuming from a queue
         if not self.is_worker(workername):
             raise web.HTTPError(404, "Unknown worker '%s'" % workername)
 
-        # queue = self.get_argument('queue')
-
-        # logger.info("Canceling consumer '%s' from worker '%s'",
-        #             queue, workername)
-        # response = self.capp.control.broadcast(
-        #     'cancel_consumer', arguments={'queue': queue},
-        #     destination=[workername], reply=True)
-        # if response and 'ok' in response[0][workername]:
-        #     self.write(dict(message=response[0][workername]['ok']))
-        # else:
-        #     logger.error(response)
-        #     self.set_status(403)
-        #     self.write(
-        #         "Failed to cancel '%s' consumer from '%s' worker: %s" % (
-        #             queue, workername, self.error_reason(workername, response)
-        #         ))
         self.set_status(403)
         self.write("You do not have permission!!!")
 
@@ -437,11 +345,6 @@ Revoke a task
 :statuscode 200: no error
 :statuscode 401: unauthorized request
         """
-        # logger.info("Revoking task '%s'", taskid)
-        # terminate = self.get_argument('terminate', default=False, type=bool)
-        # signal = self.get_argument('signal', default='SIGTERM', type=str)
-        # self.capp.control.revoke(taskid, terminate=terminate, signal=signal)
-        # self.write(dict(message="Revoked '%s'" % taskid))
         self.set_status(403)
         self.write("You do not have permission!!!")
 
@@ -485,25 +388,6 @@ Change soft and hard time limits for a task
         hard = self.get_argument('hard', default=None, type=float)
         soft = self.get_argument('soft', default=None, type=float)
 
-        # if taskname not in self.capp.tasks:
-        #     raise web.HTTPError(404, "Unknown task '%s'" % taskname)
-        # if workername is not None and not self.is_worker(workername):
-        #     raise web.HTTPError(404, "Unknown worker '%s'" % workername)
-
-        # logger.info("Setting timeouts for '%s' task (%s, %s)",
-        #             taskname, soft, hard)
-        # destination = [workername] if workername is not None else None
-        # response = self.capp.control.time_limit(
-        #     taskname, reply=True, hard=hard, soft=soft,
-        #     destination=destination)
-
-        # if response and 'ok' in response[0][workername]:
-        #     self.write(dict(message=response[0][workername]['ok']))
-        # else:
-        #     logger.error(response)
-        #     self.set_status(403)
-        #     self.write("Failed to set timeouts: '%s'" %
-        #                self.error_reason(taskname, response))
         self.set_status(403)
         self.write("You do not have permission!!!")
 
@@ -546,22 +430,5 @@ Change rate limit for a task
         workername = self.get_argument('workername')
         ratelimit = self.get_argument('ratelimit')
 
-        # if taskname not in self.capp.tasks:
-        #     raise web.HTTPError(404, "Unknown task '%s'" % taskname)
-        # if workername is not None and not self.is_worker(workername):
-        #     raise web.HTTPError(404, "Unknown worker '%s'" % workername)
-
-        # logger.info("Setting '%s' rate limit for '%s' task",
-        #             ratelimit, taskname)
-        # destination = [workername] if workername is not None else None
-        # response = self.capp.control.rate_limit(
-        #     taskname, ratelimit, reply=True, destination=destination)
-        # if response and 'ok' in response[0][workername]:
-        #     self.write(dict(message=response[0][workername]['ok']))
-        # else:
-        #     logger.error(response)
-        #     self.set_status(403)
-        #     self.write("Failed to set rate limit: '%s'" %
-        #                self.error_reason(taskname, response))
         self.set_status(403)
         self.write("You do not have permission!!!")
